@@ -8,7 +8,7 @@ environment:
   sdk: '>=1.20.1 <2.0.0'
 
 dependencies:
-  process_run: '>=0.5.2'
+  process_run: '>=0.5.4'
   tekartik_cmd_echo:
     git: git://github.com/tekartik/cmd_echo.dart
 
@@ -19,6 +19,7 @@ dev_dependencies:
 dependency_overrides:
   process_run:
     git: git://github.com/tekartik/process_run.dart
+    version: ">=0.5.4"
 #    path: ../process_run.dart
 executables:
   cmd_record:
