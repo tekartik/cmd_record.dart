@@ -1,8 +1,35 @@
 # cmd_record
 
-A sample command-line application.
+A sample command-line stdout/stderr/stdin recorder
 
+````
+Usage: cmd_record <command> [<arguments>]
 
+Example: cmd_record -o "Hello world"
+will display "Hellow world"
+
+Global options:
+-h, --help              Usage help
+-v, --verbose           Verbose
+-n, --no-stderr         No stderr
+-s, --run-in-shell      RunInShell
+-j, --json              Save as json
+-i, --[no-]stdin        stdin read, need CTRL-C to terminate
+-w, --[no-]own-stdin    handle stdin and forward command
+-x, --exit-code         Exit code to return
+    --version           Print the command version
+````
+
+## Activation
+
+### From git repository
+
+    pub global activate -s git git://github.com/tekartik/cmd_record.dart
+
+### From local path
+
+    pub global activate -s path .
+    
 ## Quick test
 
 ### out record test
@@ -19,6 +46,17 @@ should give in `cmd_record.log` something like:
     
 should give in `cmd_record.log` something like:
 
-    00:00.165 > out
+    00:00.157 E err
     
+### in record test
+
+Recording stdin for now requires `CTRL-C` to exit has the main program handles stdin
+
+    bin/cmd_record.dart -i example/echo.dart --stdin
+    
+should give in `cmd_record.log` something like:
+
+    00:09.574 $ some text entered
+    00:09.604 > some text entered
+
     

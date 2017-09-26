@@ -16,10 +16,10 @@ dev_dependencies:
   test: ">=0.12.0"
   dev_test: any
 
-dependency_overrides:
-  process_run:
-    git: git://github.com/tekartik/process_run.dart
-    version: ">=0.5.4"
+# dependency_overrides:
+#  process_run:
+#    git: git://github.com/tekartik/process_run.dart
+#    version: ">=0.5.4"
 #    path: ../process_run.dart
 executables:
   cmd_record:
