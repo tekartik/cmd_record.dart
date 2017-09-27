@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:process_run/process_cmd.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:tekartik_cmd_record/src/utils.dart';
 
 Version version = new Version(0, 1, 0);
 
@@ -79,27 +80,6 @@ class HistoryItem {
   toJson() => [time, line];
 
   getOutput(String prefix) {
-    String durationToString(Duration duration) {
-      String threeDigits(int n) {
-        if (n >= 100) return "$n";
-        if (n >= 10) return "0$n";
-        return "0$n";
-      }
-
-      String twoDigits(int n) {
-        if (n >= 10) return "$n";
-        return "0$n";
-      }
-
-      String twoDigitMinutes =
-          twoDigits(duration.inMinutes.remainder(Duration.MINUTES_PER_HOUR));
-      String twoDigitSeconds =
-          twoDigits(duration.inSeconds.remainder(Duration.SECONDS_PER_MINUTE));
-      String threeDigitMillis = threeDigits(
-          duration.inMilliseconds.remainder(Duration.MILLISECONDS_PER_SECOND));
-      return "$twoDigitMinutes:$twoDigitSeconds.$threeDigitMillis";
-    }
-
     return "${durationToString(
         new Duration(microseconds: time))} ${prefix} ${line}";
   }

@@ -1,6 +1,6 @@
 name: tekartik_cmd_record
 description: Record command line process stdout, stderr and stdin
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/tekartik/cmd_record.dart
 author: tekartik <alex@tekartik.com>
 
