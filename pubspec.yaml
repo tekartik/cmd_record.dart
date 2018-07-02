@@ -10,7 +10,9 @@ environment:
 dependencies:
   process_run: '>=0.5.4'
   tekartik_cmd_echo:
-    git: git://github.com/tekartik/cmd_echo.dart
+    git:
+      url: git://github.com/tekartik/cmd_echo.dart
+      ref: dart1
 
 dev_dependencies:
   test: ">=0.12.0"
