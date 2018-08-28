@@ -68,7 +68,7 @@ main(List<String> arguments) async {
   bool verbose = _argResults['verbose'];
   bool runInShell = _argResults[flagRunInShell];
   bool recordStdin = _argResults[flagStdin];
-  bool json = _argResults[flagJson];
+  bool asJson = _argResults[flagJson];
   bool noStdErr = _argResults[flagNoStderr];
   bool ownStdin = _argResults[flagOwnStdin];
 
@@ -108,22 +108,22 @@ main(List<String> arguments) async {
 
   History history;
   IOSink ioSink;
-  if (json || verbose) {
+  if (asJson || verbose) {
     history = new History();
   } else {
-    ioSink = new File("cmd_record.log").openWrite(mode: FileMode.WRITE);
+    ioSink = new File("cmd_record.log").openWrite(mode: FileMode.write);
   }
 
   Stream<List<int>> inStream;
-  StreamController inStreamController;
+  StreamController<List<int>> inStreamController;
   if (ownStdin) {
-    inStreamController = new StreamController(sync: true);
+    inStreamController = new StreamController<List<int>>(sync: true);
     inStream = inStreamController.stream;
     stdin
-        .transform(UTF8.decoder)
+        .transform(utf8.decoder)
         .transform(new LineSplitter())
         .listen((String line) {
-      inStreamController.add(UTF8.encode("$line\n"));
+      inStreamController.add(utf8.encode("$line\n"));
     });
   }
 
@@ -143,6 +143,6 @@ main(List<String> arguments) async {
   }
 
   if (history != null) {
-    await new File("cmd_record.json").writeAsString(JSON.encode(history));
+    await new File("cmd_record.json").writeAsString(json.encode(history));
   }
 }

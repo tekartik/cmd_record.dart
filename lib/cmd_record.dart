@@ -80,8 +80,7 @@ class HistoryItem {
   toJson() => [time, line];
 
   getOutput(String prefix) {
-    return "${durationToString(
-        new Duration(microseconds: time))} ${prefix} ${line}";
+    return "${durationToString(new Duration(microseconds: time))} ${prefix} ${line}";
   }
 }
 
@@ -112,7 +111,7 @@ class HistorySink implements StreamSink<List<int>> {
   /// is piped to the [done] future.
   HistorySink(this.ioSink, this.stopwatch) {
     lineController.stream
-        .transform(UTF8.decoder)
+        .transform(utf8.decoder)
         .transform(new LineSplitter())
         .listen((String line) {
       itemController.add(new HistoryItem()
@@ -199,7 +198,7 @@ Future record(String executable, List<String> arguments,
       stdinController.add(data);
       stdinRecordController.add(data);
     })
-      ..onError((e, st) {
+      ..onError((e, StackTrace st) {
         stdinController.addError(e, st);
         stdinRecordController.addError(e, st);
       })
@@ -209,7 +208,7 @@ Future record(String executable, List<String> arguments,
       });
 
     stdinRecordController.stream
-        .transform(UTF8.decoder)
+        .transform(utf8.decoder)
         .transform(new LineSplitter())
         .listen((String line) {
       var item = new HistoryItem()
@@ -263,8 +262,8 @@ dump(History history) {
   _Parser inParser = new _Parser(r'$', history.inItems);
   var parsers = [inParser];
   stdout.writeln('date ${history.date}\nduration ${history.duration}');
-  stdout.writeln('\$ ${executableArgumentsToString(
-          history.executable, history.arguments)}\n');
+  stdout.writeln(
+      '\$ ${executableArgumentsToString(history.executable, history.arguments)}\n');
 
   bool done = false;
   while (!done) {

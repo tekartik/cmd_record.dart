@@ -11,10 +11,11 @@ String durationToString(Duration duration) {
   }
 
   String twoDigitMinutes =
-      twoDigits(duration.inMinutes.remainder(Duration.MINUTES_PER_HOUR));
-  String twoDigitSeconds =
-      twoDigits(duration.inSeconds.remainder(Duration.SECONDS_PER_MINUTE));
-  String threeDigitMillis = threeDigits(
-      duration.inMilliseconds.remainder(Duration.MILLISECONDS_PER_SECOND));
+      twoDigits(duration.inMinutes.remainder(Duration.minutesPerHour).toInt());
+  String twoDigitSeconds = twoDigits(
+      duration.inSeconds.remainder(Duration.secondsPerMinute).toInt());
+  String threeDigitMillis = threeDigits(duration.inMilliseconds
+      .remainder(Duration.millisecondsPerSecond)
+      .toInt());
   return "$twoDigitMinutes:$twoDigitSeconds.$threeDigitMillis";
 }

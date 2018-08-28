@@ -41,10 +41,10 @@ void main() {
     test('in', () async {
       History history = new History();
       ProcessCmd cmd = dartCmd([echoScriptPath, '--stdin']);
-      StreamController inController = new StreamController();
+      var inController = new StreamController<List<int>>();
       Future future = record(cmd.executable, cmd.arguments,
           noStdOutput: true, inStream: inController.stream, history: history);
-      inController.add(UTF8.encode("in"));
+      inController.add(utf8.encode("in"));
       inController.close();
       await future;
       //devPrint(JSON.encode(history));
