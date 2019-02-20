@@ -9,7 +9,7 @@ import 'package:process_run/process_cmd.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_cmd_record/src/utils.dart';
 
-Version version = new Version(0, 1, 0);
+Version version = Version(0, 1, 0);
 
 String get currentScriptName => basenameWithoutExtension(Platform.script.path);
 
@@ -37,8 +37,6 @@ const String inPrefix = r"$";
 const String outPrefix = r">";
 const String errPrefix = r"E";
 
-enum Source { IN, OUT, ERR }
-
 class History {
   final List<HistoryItem> inItems = [];
   final List<HistoryItem> outItems = [];
@@ -51,8 +49,8 @@ class History {
 
   Duration duration;
 
-  toJson() {
-    Map record = {};
+  Map<String, dynamic> toJson() {
+    final record = <String, dynamic>{};
     record["date"] = date.toIso8601String();
     record["duration"] = duration.toString();
     record["executable"] = executable;
@@ -77,10 +75,10 @@ class HistoryItem {
   int time;
   String line;
 
-  toJson() => [time, line];
+  List<dynamic> toJson() => [time, line];
 
-  getOutput(String prefix) {
-    return "${durationToString(new Duration(microseconds: time))} ${prefix} ${line}";
+  String getOutput(String prefix) {
+    return "${durationToString(Duration(microseconds: time))} ${prefix} ${line}";
   }
 }
 
@@ -89,9 +87,8 @@ class HistorySink implements StreamSink<List<int>> {
 
   Stream<HistoryItem> get stream => itemController.stream;
 
-  StreamController<List<int>> lineController = new StreamController(sync: true);
-  StreamController<HistoryItem> itemController =
-      new StreamController(sync: true);
+  StreamController<List<int>> lineController = StreamController(sync: true);
+  StreamController<HistoryItem> itemController = StreamController(sync: true);
 
   final Stopwatch stopwatch;
 
@@ -102,8 +99,9 @@ class HistorySink implements StreamSink<List<int>> {
   bool get isClosed => _isClosed;
   var _isClosed = false;
 
+  @override
   Future get done => _doneCompleter.future;
-  final _doneCompleter = new Completer<dynamic>();
+  final _doneCompleter = Completer<dynamic>();
 
   /// Creates a new sink.
   ///
@@ -112,27 +110,31 @@ class HistorySink implements StreamSink<List<int>> {
   HistorySink(this.ioSink, this.stopwatch) {
     lineController.stream
         .transform(utf8.decoder)
-        .transform(new LineSplitter())
+        .transform(const LineSplitter())
         .listen((String line) {
-      itemController.add(new HistoryItem()
+      itemController.add(HistoryItem()
         ..time = stopwatch.elapsedMicroseconds
         ..line = line);
     });
   }
 
+  @override
   void add(List<int> data) {
     lineController.add(data);
     ioSink?.add(data);
   }
 
+  @override
   void addError(error, [StackTrace stackTrace]) {}
 
+  @override
   Future addStream(Stream<List<int>> stream) {
-    var completer = new Completer.sync();
+    var completer = Completer.sync();
     stream.listen(add, onError: addError, onDone: completer.complete);
     return completer.future;
   }
 
+  @override
   Future close() async {
     /*
     // eventually close lose command
@@ -168,11 +170,11 @@ Future record(String executable, List<String> arguments,
   recordStdin ??= inStream != null;
 
   // Run the command
-  ProcessCmd cmd = processCmd(executable, arguments, runInShell: runInShell);
+  ProcessCmd cmd = ProcessCmd(executable, arguments, runInShell: runInShell);
 
-  Stopwatch stopwatch = new Stopwatch();
+  Stopwatch stopwatch = Stopwatch();
 
-  HistorySink outSink = new HistorySink(noStdOutput ? null : stdout, stopwatch);
+  HistorySink outSink = HistorySink(noStdOutput ? null : stdout, stopwatch);
   outSink.stream.listen((HistoryItem item) {
     // Output
     dumpSink?.writeln(item.getOutput(outPrefix));
@@ -180,7 +182,7 @@ Future record(String executable, List<String> arguments,
   });
   HistorySink errSink;
   if (!noStderr) {
-    errSink = new HistorySink(noStdOutput ? null : stderr, stopwatch);
+    errSink = HistorySink(noStdOutput ? null : stderr, stopwatch);
     errSink.stream.listen((HistoryItem item) {
       // Output
       dumpSink?.writeln(item.getOutput(errPrefix));
@@ -188,10 +190,9 @@ Future record(String executable, List<String> arguments,
     });
   }
 
-  StreamController<List<int>> stdinController =
-      new StreamController(sync: true);
+  StreamController<List<int>> stdinController = StreamController(sync: true);
   StreamController<List<int>> stdinRecordController =
-      new StreamController(sync: true);
+      StreamController(sync: true);
 
   if (recordStdin) {
     stdinStream.listen((List<int> data) {
@@ -209,9 +210,9 @@ Future record(String executable, List<String> arguments,
 
     stdinRecordController.stream
         .transform(utf8.decoder)
-        .transform(new LineSplitter())
+        .transform(const LineSplitter())
         .listen((String line) {
-      var item = new HistoryItem()
+      var item = HistoryItem()
         ..time = stopwatch.elapsedMicroseconds
         ..line = line;
       // Output
@@ -220,7 +221,7 @@ Future record(String executable, List<String> arguments,
     });
   }
 
-  history?.date = new DateTime.now();
+  history?.date = DateTime.now();
   history?.executable = executable;
   history?.arguments = arguments;
 
@@ -258,8 +259,8 @@ class _Parser {
   }
 }
 
-dump(History history) {
-  _Parser inParser = new _Parser(r'$', history.inItems);
+void dump(History history) {
+  _Parser inParser = _Parser(r'$', history.inItems);
   var parsers = [inParser];
   stdout.writeln('date ${history.date}\nduration ${history.duration}');
   stdout.writeln(
