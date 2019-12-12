@@ -30,12 +30,12 @@ Global options:
     --version       Print the command version
 */
 
-const String flagRunInShell = "run-in-shell";
-const String flagStdin = "stdin";
+const String flagRunInShell = 'run-in-shell';
+const String flagStdin = 'stdin';
 
-const String inPrefix = r"$";
-const String outPrefix = r">";
-const String errPrefix = r"E";
+const String inPrefix = r'$';
+const String outPrefix = r'>';
+const String errPrefix = r'E';
 
 class History {
   final List<HistoryItem> inItems = [];
@@ -51,22 +51,22 @@ class History {
 
   Map<String, dynamic> toJson() {
     final record = <String, dynamic>{};
-    record["date"] = date.toIso8601String();
-    record["duration"] = duration.toString();
-    record["executable"] = executable;
-    record["arguments"] = arguments;
+    record['date'] = date.toIso8601String();
+    record['duration'] = duration.toString();
+    record['executable'] = executable;
+    record['arguments'] = arguments;
 
     if (inItems.isNotEmpty) {
-      record["in"] = inItems;
+      record['in'] = inItems;
     }
 
     if (outItems.isNotEmpty) {
-      record["out"] = outItems;
+      record['out'] = outItems;
     }
     if (errItems.isNotEmpty) {
-      record["err"] = errItems;
+      record['err'] = errItems;
     }
-    record["exitCode"] = result.exitCode;
+    record['exitCode'] = result.exitCode;
     return record;
   }
 }
@@ -78,7 +78,7 @@ class HistoryItem {
   List<dynamic> toJson() => [time, line];
 
   String getOutput(String prefix) {
-    return "${durationToString(Duration(microseconds: time))} ${prefix} ${line}";
+    return '${durationToString(Duration(microseconds: time))} ${prefix} ${line}';
   }
 }
 
@@ -143,6 +143,7 @@ class HistorySink implements StreamSink<List<int>> {
       results.removeLast();
     }
     */
+    _isClosed = true;
     await lineController.close();
     await itemController.close();
   }
@@ -165,16 +166,16 @@ Future record(String executable, List<String> arguments,
   noStdOutput ??= false;
   noStderr ??= false;
 
-  Stream<List<int>> stdinStream = inStream ?? stdin;
+  final stdinStream = inStream ?? stdin;
   // by default record if there is an incoming stream
   recordStdin ??= inStream != null;
 
   // Run the command
-  ProcessCmd cmd = ProcessCmd(executable, arguments, runInShell: runInShell);
+  final cmd = ProcessCmd(executable, arguments, runInShell: runInShell);
 
-  Stopwatch stopwatch = Stopwatch();
+  final stopwatch = Stopwatch();
 
-  HistorySink outSink = HistorySink(noStdOutput ? null : stdout, stopwatch);
+  final outSink = HistorySink(noStdOutput ? null : stdout, stopwatch);
   outSink.stream.listen((HistoryItem item) {
     // Output
     dumpSink?.writeln(item.getOutput(outPrefix));
@@ -190,9 +191,8 @@ Future record(String executable, List<String> arguments,
     });
   }
 
-  StreamController<List<int>> stdinController = StreamController(sync: true);
-  StreamController<List<int>> stdinRecordController =
-      StreamController(sync: true);
+  final stdinController = StreamController<List<int>>(sync: true);
+  final stdinRecordController = StreamController<List<int>>(sync: true);
 
   if (recordStdin) {
     stdinStream.listen((List<int> data) {
@@ -226,7 +226,7 @@ Future record(String executable, List<String> arguments,
   history?.arguments = arguments;
 
   stopwatch.start();
-  ProcessResult result = await runCmd(cmd,
+  final result = await runCmd(cmd,
       stdout: outSink,
       stderr: errSink,
       stdin: recordStdin ? stdinController.stream : null);
@@ -260,18 +260,18 @@ class _Parser {
 }
 
 void dump(History history) {
-  _Parser inParser = _Parser(r'$', history.inItems);
+  final inParser = _Parser(r'$', history.inItems);
   var parsers = [inParser];
   stdout.writeln('date ${history.date}\nduration ${history.duration}');
   stdout.writeln(
       '\$ ${executableArgumentsToString(history.executable, history.arguments)}\n');
 
-  bool done = false;
+  var done = false;
   while (!done) {
     _Parser minParser;
     int minTime;
-    for (_Parser parser in parsers) {
-      HistoryItem item = parser.current;
+    for (final parser in parsers) {
+      final item = parser.current;
       if (item != null) {
         if ((minTime == null) || (item.time < minTime)) {
           minParser = parser;

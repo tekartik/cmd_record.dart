@@ -29,11 +29,11 @@ Global options:
     --version       Print the command version
 */
 
-const String _flagRunInShell = "run-in-shell";
-const String _flagStdin = "stdin";
-const String _flagOwnStdin = "own-stdin";
-const String _flagJson = "json";
-const String _flagNoStderr = "no-stderr";
+const String _flagRunInShell = 'run-in-shell';
+const String _flagStdin = 'stdin';
+const String _flagOwnStdin = 'own-stdin';
+const String _flagJson = 'json';
+const String _flagNoStderr = 'no-stderr';
 
 ///
 /// write rest arguments as lines
@@ -41,7 +41,7 @@ const String _flagNoStderr = "no-stderr";
 Future main(List<String> arguments) async {
   //setupQuickLogging();
 
-  ArgParser parser = ArgParser(allowTrailingOptions: false);
+  final parser = ArgParser(allowTrailingOptions: false);
   parser.addFlag('help', abbr: 'h', help: 'Usage help', negatable: false);
   parser.addFlag('verbose', abbr: 'v', help: 'Verbose', negatable: false);
   parser.addFlag(_flagNoStderr, abbr: 'n', help: 'No stderr', negatable: false);
@@ -62,7 +62,7 @@ Future main(List<String> arguments) async {
   parser.addFlag('version',
       help: 'Print the command version', negatable: false);
 
-  ArgResults _argResults = parser.parse(arguments);
+  final _argResults = parser.parse(arguments);
 
   final help = _argResults['help'] as bool;
   final verbose = _argResults['verbose'] as bool;
@@ -77,10 +77,10 @@ Future main(List<String> arguments) async {
     stdout.writeln();
     stdout.writeln('Usage: ${_currentScriptName} <command> [<arguments>]');
     stdout.writeln();
-    stdout.writeln('Example: ${_currentScriptName} -o "Hello world"');
-    stdout.writeln('will display "Hellow world"');
+    stdout.writeln("Example: ${_currentScriptName} -o 'Hello world'");
+    stdout.writeln("will display 'Hello world'");
     stdout.writeln();
-    stdout.writeln("Global options:");
+    stdout.writeln('Global options:');
     stdout.writeln(parser.usage);
   }
 
@@ -103,15 +103,15 @@ Future main(List<String> arguments) async {
   }
 
   // first agument is executable, remaining is arguments
-  String cmdExecutable = _argResults.rest.first;
-  List<String> cmdArguments = _argResults.rest.sublist(1);
+  final cmdExecutable = _argResults.rest.first;
+  final cmdArguments = _argResults.rest.sublist(1);
 
   History history;
   IOSink ioSink;
   if (asJson || verbose) {
     history = History();
   } else {
-    ioSink = File("cmd_record.log").openWrite(mode: FileMode.write);
+    ioSink = File('cmd_record.log').openWrite(mode: FileMode.write);
   }
 
   Stream<List<int>> inStream;
@@ -123,7 +123,7 @@ Future main(List<String> arguments) async {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .listen((String line) {
-      inStreamController.add(utf8.encode("$line\n"));
+      inStreamController.add(utf8.encode('$line\n'));
     });
   }
 
@@ -143,6 +143,6 @@ Future main(List<String> arguments) async {
   }
 
   if (history != null) {
-    await File("cmd_record.json").writeAsString(json.encode(history));
+    await File('cmd_record.json').writeAsString(json.encode(history));
   }
 }
