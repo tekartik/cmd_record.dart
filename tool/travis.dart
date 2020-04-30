@@ -1,14 +1,21 @@
-import 'package:process_run/shell.dart';
+import 'dart:io';
+
+import 'package:process_run/shell_run.dart';
+import 'package:pub_semver/pub_semver.dart';
 
 Future main() async {
   var shell = Shell();
 
+  print(Platform.version);
+
   await shell.run('''
   # Analyze code
   dartanalyzer --fatal-warnings --fatal-infos .
-  dartfmt -n --set-exit-if-changed .
-
   pub run test -p vm
   
   ''');
+  // Formatting change int 2.9 with hashbang first line
+  if (dartVersion >= Version(2, 9, 0, pre: '0')) {
+    await shell.run('dartfmt -n --set-exit-if-changed .');
+  }
 }
