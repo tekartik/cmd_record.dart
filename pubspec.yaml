@@ -8,7 +8,7 @@ environment:
   sdk: '>=2.6.0 <3.0.0'
 
 dependencies:
-  process_run: '>=0.10.2'
+  process_run: '>=0.10.9-dev.1'
   tekartik_cmd_echo:
     git:
       url: git://github.com/tekartik/cmd_echo.dart
