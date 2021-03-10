@@ -79,7 +79,7 @@ class HistoryItem {
   List<dynamic> toJson() => [time, line];
 
   String getOutput(String prefix) {
-    return '${durationToString(Duration(microseconds: time))} ${prefix} ${line}';
+    return '${durationToString(Duration(microseconds: time))} $prefix $line';
   }
 }
 
