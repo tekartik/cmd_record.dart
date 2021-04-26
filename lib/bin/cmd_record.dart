@@ -6,8 +6,8 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:path/path.dart';
-import 'package:tekartik_cmd_record/src/cmd_record.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:tekartik_cmd_record/src/cmd_record.dart';
 
 Version _version = Version(0, 1, 0);
 
