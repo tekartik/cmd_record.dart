@@ -1,5 +1,5 @@
-import 'package:tekartik_cmd_record/src/utils.dart';
 import 'package:dev_test/test.dart';
+import 'package:tekartik_cmd_record/src/utils.dart';
 
 void main() {
   group('src_utils', () {
