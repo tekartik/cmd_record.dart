@@ -6,14 +6,14 @@ homepage: https://github.com/tekartik/cmd_record.dart
 publish_to: none
 
 environment:
-  sdk: '>=2.6.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   process_run: '>=0.10.9-dev.1'
   tekartik_cmd_echo:
     git:
       url: git://github.com/tekartik/cmd_echo.dart
-      ref: dart2
+      ref: null_safety
     version: '>=0.2.1+1'
 
 dev_dependencies:

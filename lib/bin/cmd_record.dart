@@ -66,12 +66,12 @@ Future main(List<String> arguments) async {
   final _argResults = parser.parse(arguments);
 
   final help = _argResults['help'] as bool;
-  final verbose = _argResults['verbose'] as bool;
-  final runInShell = _argResults[_flagRunInShell] as bool;
-  final recordStdin = _argResults[_flagStdin] as bool;
-  final asJson = _argResults[_flagJson] as bool;
-  final noStdErr = _argResults[_flagNoStderr] as bool;
-  final ownStdin = _argResults[_flagOwnStdin] as bool;
+  final verbose = _argResults['verbose'] as bool?;
+  final runInShell = _argResults[_flagRunInShell] as bool?;
+  final recordStdin = _argResults[_flagStdin] as bool?;
+  final asJson = _argResults[_flagJson] as bool?;
+  final noStdErr = _argResults[_flagNoStderr] as bool?;
+  final ownStdin = _argResults[_flagOwnStdin] as bool?;
 
   void _printUsage() {
     stdout.writeln('Echo utility');
@@ -107,17 +107,17 @@ Future main(List<String> arguments) async {
   final cmdExecutable = _argResults.rest.first;
   final cmdArguments = _argResults.rest.sublist(1);
 
-  History history;
-  IOSink ioSink;
-  if (asJson || verbose) {
+  History? history;
+  IOSink? ioSink;
+  if (asJson! || verbose!) {
     history = History();
   } else {
     ioSink = File('cmd_record.log').openWrite(mode: FileMode.write);
   }
 
-  Stream<List<int>> inStream;
-  StreamController<List<int>> inStreamController;
-  if (ownStdin) {
+  Stream<List<int>>? inStream;
+  late StreamController<List<int>> inStreamController;
+  if (ownStdin!) {
     inStreamController = StreamController<List<int>>(sync: true);
     inStream = inStreamController.stream;
     stdin
@@ -139,8 +139,8 @@ Future main(List<String> arguments) async {
   if (ownStdin) {
     await inStreamController.close();
   }
-  if (verbose) {
-    dump(history);
+  if (verbose!) {
+    dump(history!);
   }
 
   if (history != null) {

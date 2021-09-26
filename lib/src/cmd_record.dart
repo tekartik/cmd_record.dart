@@ -42,13 +42,13 @@ class History {
   final List<HistoryItem> inItems = [];
   final List<HistoryItem> outItems = [];
   final List<HistoryItem> errItems = [];
-  String executable;
-  List<String> arguments;
-  DateTime date;
+  String? executable;
+  List<String>? arguments;
+  late DateTime date;
 
-  ProcessResult result;
+  late ProcessResult result;
 
-  Duration duration;
+  Duration? duration;
 
   Map<String, dynamic> toJson() {
     final record = <String, dynamic>{};
@@ -73,18 +73,18 @@ class History {
 }
 
 class HistoryItem {
-  int time;
-  String line;
+  int? time;
+  String? line;
 
   List<dynamic> toJson() => [time, line];
 
   String getOutput(String prefix) {
-    return '${durationToString(Duration(microseconds: time))} $prefix $line';
+    return '${durationToString(Duration(microseconds: time!))} $prefix $line';
   }
 }
 
 class HistorySink implements StreamSink<List<int>> {
-  final StreamSink ioSink;
+  final StreamSink? ioSink;
 
   Stream<HistoryItem> get stream => itemController.stream;
 
@@ -126,7 +126,7 @@ class HistorySink implements StreamSink<List<int>> {
   }
 
   @override
-  void addError(error, [StackTrace stackTrace]) {}
+  void addError(error, [StackTrace? stackTrace]) {}
 
   @override
   Future addStream(Stream<List<int>> stream) {
@@ -154,16 +154,16 @@ class HistorySink implements StreamSink<List<int>> {
 /// write rest arguments as lines
 /// if history is not null
 ///
-Future record(String executable, List<String> arguments,
-    {bool runInShell,
-    bool recordStdin,
+Future record(String? executable, List<String> arguments,
+    {bool? runInShell,
+    bool? recordStdin,
 
     /// prevent streaming to stderr and stdout in real time
-    bool noStdOutput,
-    StringSink dumpSink,
-    History history,
-    Stream<List<int>> inStream,
-    bool noStderr}) async {
+    bool? noStdOutput,
+    StringSink? dumpSink,
+    History? history,
+    Stream<List<int>>? inStream,
+    bool? noStderr}) async {
   noStdOutput ??= false;
   noStderr ??= false;
 
@@ -180,15 +180,15 @@ Future record(String executable, List<String> arguments,
   outSink.stream.listen((HistoryItem item) {
     // Output
     dumpSink?.writeln(item.getOutput(outPrefix));
-    history?.outItems?.add(item);
+    history?.outItems.add(item);
   });
-  HistorySink errSink;
+  HistorySink? errSink;
   if (!noStderr) {
     errSink = HistorySink(noStdOutput ? null : stderr, stopwatch);
     errSink.stream.listen((HistoryItem item) {
       // Output
       dumpSink?.writeln(item.getOutput(errPrefix));
-      history?.errItems?.add(item);
+      history?.errItems.add(item);
     });
   }
 
@@ -200,7 +200,7 @@ Future record(String executable, List<String> arguments,
       stdinController.add(data);
       stdinRecordController.add(data);
     })
-      ..onError((e, StackTrace st) {
+      ..onError((Object e, StackTrace st) {
         stdinController.addError(e, st);
         stdinRecordController.addError(e, st);
       })
@@ -218,7 +218,7 @@ Future record(String executable, List<String> arguments,
         ..line = line;
       // Output
       dumpSink?.writeln(item.getOutput(inPrefix));
-      history?.inItems?.add(item);
+      history?.inItems.add(item);
     });
   }
 
@@ -239,24 +239,24 @@ Future record(String executable, List<String> arguments,
 }
 
 class _Parser {
-  int index = 0;
+  int? index = 0;
   final List<HistoryItem> list;
   final String prefix;
 
   _Parser(this.prefix, this.list);
 
-  HistoryItem get current {
+  HistoryItem? get current {
     if (index == null) {
       return null;
-    } else if (index >= (list?.length ?? 0)) {
+    } else if (index! >= (list.length)) {
       index = null;
       return null;
     }
-    return list[index];
+    return list[index!];
   }
 
   void next() {
-    index++;
+    index = index! + 1;
   }
 }
 
@@ -269,12 +269,12 @@ void dump(History history) {
 
   var done = false;
   while (!done) {
-    _Parser minParser;
-    int minTime;
+    _Parser? minParser;
+    int? minTime;
     for (final parser in parsers) {
       final item = parser.current;
       if (item != null) {
-        if ((minTime == null) || (item.time < minTime)) {
+        if ((minTime == null) || (item.time! < minTime)) {
           minParser = parser;
           minTime = item.time;
         }
@@ -282,7 +282,7 @@ void dump(History history) {
     }
 
     if (minParser != null) {
-      print(minParser.current.getOutput(inParser.prefix));
+      print(minParser.current!.getOutput(inParser.prefix));
 
       /*
     }
