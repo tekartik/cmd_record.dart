@@ -6,7 +6,6 @@ import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
-import 'package:process_run/process_cmd.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:tekartik_cmd_record/src/utils.dart';
 
