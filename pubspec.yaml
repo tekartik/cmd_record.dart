@@ -12,8 +12,8 @@ dependencies:
   process_run: '>=0.10.9-dev.1'
   tekartik_cmd_echo:
     git:
-      url: https://github.com/tekartik/cmd_echo.dart
-      ref: dart2_3
+      url: git://github.com/tekartik/cmd_echo.dart
+      ref: null_safety
     version: '>=0.2.1+1'
 
 dev_dependencies:
