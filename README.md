@@ -24,7 +24,7 @@ Global options:
 
 ### From git repository
 
-    pub global activate -s git git://github.com/tekartik/cmd_record.dart
+    pub global activate -s git https://github.com/tekartik/cmd_record.dart
 
 ### From local path
 

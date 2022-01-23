@@ -12,8 +12,8 @@ dependencies:
   process_run: '>=0.10.9-dev.1'
   tekartik_cmd_echo:
     git:
-      url: git://github.com/tekartik/cmd_echo.dart
-      ref: null_safety
+      url: https://github.com/tekartik/cmd_echo.dart
+      ref: dart2_3
     version: '>=0.2.1+1'
 
 dev_dependencies:
@@ -22,7 +22,7 @@ dev_dependencies:
 
 # dependency_overrides:
 #  process_run:
-#    git: git://github.com/tekartik/process_run.dart
+#    git: https://github.com/tekartik/process_run.dart
 #    version: ">=0.5.4"
 #    path: ../process_run.dart
 executables:
