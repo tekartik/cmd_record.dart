@@ -15,7 +15,9 @@ dependencies:
       url: https://github.com/tekartik/cmd_echo.dart
       ref: dart2_3
     version: '>=0.2.1+1'
-
+  args:
+  path:
+  pub_semver:
 dev_dependencies:
   test: ">=1.0.0"
   dev_test: any
