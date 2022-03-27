@@ -63,15 +63,15 @@ Future main(List<String> arguments) async {
   parser.addFlag('version',
       help: 'Print the command version', negatable: false);
 
-  final _argResults = parser.parse(arguments);
+  final argResults = parser.parse(arguments);
 
-  final help = _argResults['help'] as bool;
-  final verbose = _argResults['verbose'] as bool?;
-  final runInShell = _argResults[_flagRunInShell] as bool?;
-  final recordStdin = _argResults[_flagStdin] as bool?;
-  final asJson = _argResults[_flagJson] as bool?;
-  final noStdErr = _argResults[_flagNoStderr] as bool?;
-  final ownStdin = _argResults[_flagOwnStdin] as bool?;
+  final help = argResults['help'] as bool;
+  final verbose = argResults['verbose'] as bool?;
+  final runInShell = argResults[_flagRunInShell] as bool?;
+  final recordStdin = argResults[_flagStdin] as bool?;
+  final asJson = argResults[_flagJson] as bool?;
+  final noStdErr = argResults[_flagNoStderr] as bool?;
+  final ownStdin = argResults[_flagOwnStdin] as bool?;
 
   void _printUsage() {
     stdout.writeln('Echo utility');
@@ -90,7 +90,7 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  final displayVersion = _argResults['version'] as bool;
+  final displayVersion = argResults['version'] as bool;
 
   if (displayVersion) {
     stderr.writeln('$_currentScriptName version $_version');
@@ -98,14 +98,14 @@ Future main(List<String> arguments) async {
     return;
   }
 
-  if (_argResults.rest.isEmpty) {
+  if (argResults.rest.isEmpty) {
     stderr.writeln('Need a command');
     exit(1);
   }
 
   // first agument is executable, remaining is arguments
-  final cmdExecutable = _argResults.rest.first;
-  final cmdArguments = _argResults.rest.sublist(1);
+  final cmdExecutable = argResults.rest.first;
+  final cmdArguments = argResults.rest.sublist(1);
 
   History? history;
   IOSink? ioSink;
