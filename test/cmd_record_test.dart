@@ -3,7 +3,7 @@ import 'package:dev_test/test.dart';
 import 'package:path/path.dart';
 import 'package:process_run/cmd_run.dart';
 import 'package:tekartik_cmd_record/src/cmd_record.dart';
-import 'package:tekartik_common_utils/common_utils_import.dart';
+import 'package:tekartik_cmd_record/src/import.dart';
 
 String get cmdRecordScriptPath => join('bin', 'cmd_record.dart');
 
