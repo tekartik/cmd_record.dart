@@ -73,7 +73,7 @@ Future main(List<String> arguments) async {
   final noStdErr = argResults[_flagNoStderr] as bool?;
   final ownStdin = argResults[_flagOwnStdin] as bool?;
 
-  void _printUsage() {
+  void printUsage() {
     stdout.writeln('Echo utility');
     stdout.writeln();
     stdout.writeln('Usage: $_currentScriptName <command> [<arguments>]');
@@ -86,7 +86,7 @@ Future main(List<String> arguments) async {
   }
 
   if (help) {
-    _printUsage();
+    printUsage();
     return;
   }
 
