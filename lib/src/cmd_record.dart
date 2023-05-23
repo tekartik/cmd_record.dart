@@ -129,7 +129,7 @@ class HistorySink implements StreamSink<List<int>> {
 
   @override
   Future addStream(Stream<List<int>> stream) {
-    var completer = Completer.sync();
+    var completer = Completer<void>.sync();
     stream.listen(add, onError: addError, onDone: completer.complete);
     return completer.future;
   }
